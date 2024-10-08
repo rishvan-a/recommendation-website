@@ -1,307 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Recommendations</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        #tabs {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0;
-        }
-
-        .tab-button {
-            padding: 15px 25px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin: 0 5px;
-            background-color: #eaeaea;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .tab-button.active {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .item-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 0 20px;
-        }
-
-        .item-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin: 10px;
-            width: 200px;
-            transition: transform 0.2s;
-        }
-
-        .item-card:hover {
-            transform: scale(1.05);
-        }
-
-        .item-image {
-            width: 100%;
-            height: auto;
-        }
-
-        .item-title {
-            padding: 10px;
-            text-align: center;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .pagination-buttons {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .pagination-buttons button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            margin: 0 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .pagination-buttons button:hover {
-            background-color: #0056b3;
-        }
-
-        select {
-            padding: 5px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommendation Website</title>
+  <link rel="stylesheet" href="s.css">
 </head>
 <body>
-    <h1>Recommendations</h1>
+  <header>
+    <h1>Recommendation Hub</h1>
+    <nav>
+      <ul>
+        <li><a href="#movies" class="tab active" onclick="openTab(event, 'movies')">Movies</a></li>
+        <li><a href="#songs" class="tab" onclick="openTab(event, 'songs')">Songs</a></li>
+        <li><a href="#games" class="tab" onclick="openTab(event, 'games')">Games</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <!-- Tab Navigation -->
-    <div id="tabs">
-        <div class="tab-button active" onclick="showTab('movies')">Movies</div>
-        <div class="tab-button" onclick="showTab('music')">Music</div>
-        <div class="tab-button" onclick="showTab('games')">Games</div>
-    </div>
-
-    <!-- Movies Tab -->
+  <main>
     <div id="movies" class="tab-content active">
-        <label for="movie-genre">Choose Genre:</label>
-        <select id="movie-genre">
-            <option value="action">Action</option>
-            <option value="comedy">Comedy</option>
-            <option value="romance">Romance</option>
-            <option value="thriller">Thriller</option>
-            <option value="horror">Horror</option>
-        </select>
-        <button onclick="filterMovies()">Filter Movies</button>
-        <div id="movie-list" class="item-container"></div>
-        <div class="pagination-buttons">
-            <button onclick="previousPage('movies')" id="prev-movie-page">Previous Page</button>
-            <button onclick="nextPage('movies')" id="next-movie-page">Next Page</button>
-        </div>
+      <h2>Movie Recommendations</h2>
+      <input type="text" id="movie-search" placeholder="Search for movies..." oninput="searchMovies()">
+      <div class="recommendations" id="movie-recommendations"></div>
+      <div id="movie-pagination" class="pagination"></div>
     </div>
 
-    <!-- Music Tab -->
-    <div id="music" class="tab-content">
-        <label for="music-genre">Choose Genre:</label>
-        <select id="music-genre">
-            <option value="melody">melody</option>
-            <option value="tamil melody song">tamil melody song</option>
-            <option value="tamil love song">tamil love song</option>
-            <option value="tamil">Tamil</option>
-        </select>
-        <button onclick="filterMusic()">Filter Music</button>
-        <div id="music-list" class="item-container"></div>
-        <div class="pagination-buttons">
-            <button onclick="previousPage('music')" id="prev-music-page">Previous Page</button>
-            <button onclick="nextPage('music')" id="next-music-page">Next Page</button>
-        </div>
+    <div id="songs" class="tab-content">
+      <h2>Song Recommendations</h2>
+      <input type="text" id="song-search" placeholder="Search for songs..." oninput="searchSongs()">
+      <div class="recommendations" id="song-recommendations"></div>
+      <div id="song-pagination" class="pagination"></div>
     </div>
 
-    <!-- Games Tab -->
     <div id="games" class="tab-content">
-        <label for="game-genre">Choose Genre:</label>
-        <select id="game-genre">
-            <option value="action">Action</option>
-            <option value="adventure">Adventure</option>
-            <option value="rpg">RPG</option>
-            <option value="strategy">Strategy</option>
-        </select>
-        <button onclick="filterGames()">Filter Games</button>
-        <div id="game-list" class="item-container"></div>
-        <div class="pagination-buttons">
-            <button onclick="previousPage('games')" id="prev-game-page">Previous Page</button>
-            <button onclick="nextPage('games')" id="next-game-page">Next Page</button>
-        </div>
+      <h2>Game Recommendations</h2>
+      <input type="text" id="game-search" placeholder="Search for games..." oninput="searchGames()">
+      <div class="recommendations" id="game-recommendations"></div>
+      <div id="game-pagination" class="pagination"></div>
     </div>
+  </main>
 
-    <script>
-        let moviePage = 1;
-        let musicOffset = 0;
-        let gamePage = 1;
+  <footer>
+    <p>&copy; 2024 Recommendation Hub</p>
+  </footer>
 
-        function showTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-
-            // Show selected tab content and set tab button as active
-            document.getElementById(tabId).classList.add('active');
-            document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
-        }
-
-        function filterMovies() {
-            const genre = document.getElementById('movie-genre').value;
-            fetch('/movies', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `genre=${genre}&page=${moviePage}`
-            })
-            .then(response => response.json())
-            .then(movies => {
-                const movieList = document.getElementById('movie-list');
-                movieList.innerHTML = '';
-                movies.forEach(movie => {
-                    const movieCard = document.createElement('div');
-                    movieCard.classList.add('item-card');
-                    const posterPath = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/200x300';
-                    movieCard.innerHTML = `
-                        <img class="item-image" src="${posterPath}" alt="${movie.title}">
-                        <p class="item-title">${movie.title}</p>
-                    `;
-                    movieList.appendChild(movieCard);
-                });
-            });
-        }
-
-        function filterMusic() {
-            const genre = document.getElementById('music-genre').value;
-            fetch('/music', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `genre=${genre}&offset=${musicOffset}`
-            })
-            .then(response => response.json())
-            .then(music => {
-                const musicList = document.getElementById('music-list');
-                musicList.innerHTML = '';
-                music.forEach(track => {
-                    const musicCard = document.createElement('div');
-                    musicCard.classList.add('item-card');
-                    musicCard.innerHTML = `
-                        <img class="item-image" src="${track.album_cover}" alt="${track.title}">
-                        <p class="item-title">${track.title} - ${track.artist}</p>
-                    `;
-                    musicList.appendChild(musicCard);
-                });
-            });
-        }
-
-        function filterGames() {
-            const genre = document.getElementById('game-genre').value;
-            fetch('/games', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `genre=${genre}&page=${gamePage}`
-            })
-            .then(response => response.json())
-            .then(games => {
-                const gameList = document.getElementById('game-list');
-                gameList.innerHTML = '';
-                games.forEach(game => {
-                    const gameCard = document.createElement('div');
-                    gameCard.classList.add('item-card');
-                    gameCard.innerHTML = `
-                        <img class="item-image" src="${game.cover}" alt="${game.title}">
-                        <p class="item-title">${game.title}</p>
-                    `;
-                    gameList.appendChild(gameCard);
-                });
-            });
-        }
-
-        function nextPage(type) {
-            if (type === 'movies') {
-                moviePage++;
-                filterMovies();
-            } else if (type === 'music') {
-                musicOffset += 10;
-                filterMusic();
-            } else if (type === 'games') {
-                gamePage++;
-                filterGames();
-            }
-        }
-
-        function previousPage(type) {
-            if (type === 'movies' && moviePage > 1) {
-                moviePage--;
-                filterMovies();
-            } else if (type === 'music' && musicOffset >= 10) {
-                musicOffset -= 10;
-                filterMusic();
-            } else if (type === 'games' && gamePage > 1) {
-                gamePage--;
-                filterGames();
-            }
-        }
-    </script>
+  <script src="s.js"></script>
 </body>
 </html>
